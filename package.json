@@ -1,8 +1,11 @@
 {
-  "name": "Desktop",
+  "name": "committer",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
+  "preferGlobal": true,
+  "bin": {
+    "committer": "./bin/committer.js"
+  },
   "dependencies": {
     "chalk-pipe": "^1.2.0",
     "find-up": "^3.0.0",

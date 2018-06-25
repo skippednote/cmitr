@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
@@ -66,11 +68,9 @@ function checkIfRepo(rootPath) {
 }
 
 function setupQuestions(rootPath) {
-  console.log(rootPath);
   let project = projects.projects.filter(
     project => project.rootPath === rootPath,
   );
-  console.log(project);
 
   if (project.length) {
     return questionsWithDefault(project);
@@ -114,7 +114,14 @@ async function main() {
   const answers = await inquirerSetup(questions);
   saveProject(answers, rootPathWithoutSuffix);
   let commitString = `${answers.prefix}-${answers.ticket}: ${answers.message}.`;
-  execSync(`git commit -m "${commitString}"`);
+
+  try {
+    execSync(`git commit -m "${commitString}"`);
+  } catch (e) {
+    console.log(`\n\n`);
+    console.log(e.stdout.toString('utf8'));
+    process.exit(0);
+  }
 }
 
 main();
