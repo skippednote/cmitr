@@ -1,0 +1,11 @@
+{
+  "name": "Desktop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "chalk-pipe": "^1.2.0",
+    "find-up": "^3.0.0",
+    "inquirer": "^6.0.0"
+  }
+}
