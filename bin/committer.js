@@ -28,28 +28,46 @@ let questions = [
     type: 'input',
     name: 'prefix',
     message: 'Project prefix',
+    validate(value) {
+      if (value.length) {
+        return true;
+      }
+      return 'Please enter a Prefix value';
+    },
   },
-  {
-    type: 'list',
-    name: 'validation',
-    message: 'Type of validation',
-    choices: [{ name: 'Acquia' }, { name: 'None' }],
-  },
+  // {
+  //   type: 'list',
+  //   name: 'validation',
+  //   message: 'Type of validation',
+  //   choices: [{ name: 'Acquia' }, { name: 'None' }],
+  // },
   {
     type: 'input',
     name: 'ticket',
     message: 'Ticket Number',
+    validate(value) {
+      var valid = !isNaN(parseFloat(value));
+      return valid || 'Please enter ticket number';
+    },
   },
   {
     type: 'input',
     name: 'message',
     message: 'Commit Message',
+    validate(input) {
+      var regex = /(^[^ ].{15,}\.)|(Merge branch (.)+)/;
+      var valid = regex.exec(input);
+      if (valid && valid.length) {
+        return true;
+      }
+      return 'Incorret commit message';
+    },
   },
-  {
-    type: 'input',
-    name: 'summary',
-    message: 'Commit Summary',
-  },
+  // {
+  //   type: 'input',
+  //   name: 'summary',
+  //   message: 'Commit Summary',
+  // },
 ];
 
 function questionsWithDefault(project) {
@@ -113,7 +131,7 @@ async function main() {
   questions = setupQuestions(rootPathWithoutSuffix);
   const answers = await inquirerSetup(questions);
   saveProject(answers, rootPathWithoutSuffix);
-  let commitString = `${answers.prefix}-${answers.ticket}: ${answers.message}.`;
+  let commitString = `${answers.prefix}-${answers.ticket}: ${answers.message}`;
 
   try {
     execSync(`git commit -m "${commitString}"`);
