@@ -35,12 +35,6 @@ let questions = [
       return 'Please enter a Prefix value';
     }
   },
-  // {
-  //   type: 'list',
-  //   name: 'validation',
-  //   message: 'Type of validation',
-  //   choices: [{ name: 'Acquia' }, { name: 'None' }],
-  // },
   {
     type: 'input',
     name: 'ticket',
@@ -63,16 +57,11 @@ let questions = [
       return 'Incorret commit message';
     }
   }
-  // {
-  //   type: 'input',
-  //   name: 'summary',
-  //   message: 'Commit Summary',
-  // },
 ];
 
-function questionsWithDefault(project) {
+function questionsWithDefault(project, branchName) {
   questions[0].default = project[0].prefix;
-  questions[1].default = project[0].validation;
+  questions[1].default = branchName.replace(`${project[0].prefix}-`, '');
   return questions;
 }
 
@@ -85,13 +74,13 @@ function checkIfRepo(rootPath) {
   return rootPath;
 }
 
-function setupQuestions(rootPath) {
+function setupQuestions(rootPath, branchName) {
   let project = projects.projects.filter(
     project => project.rootPath === rootPath
   );
 
   if (project.length) {
-    return questionsWithDefault(project);
+    return questionsWithDefault(project, branchName);
   }
   return questions;
 }
@@ -124,11 +113,19 @@ function saveProject({ prefix, validation }, rootPath) {
 
 async function main() {
   let rootPath = await findUp('.git');
+  let branchName;
   checkIfRepo(rootPath);
+  try {
+    branchName = execSync(`git symbolic-ref --short HEAD`)
+      .toString()
+      .trim();
+  } catch (e) {
+    console.log('Not a Git repo');
+  }
 
   setup();
   let rootPathWithoutSuffix = rootPath.replace('.git', '');
-  questions = setupQuestions(rootPathWithoutSuffix);
+  questions = setupQuestions(rootPathWithoutSuffix, branchName);
   const answers = await inquirerSetup(questions);
   saveProject(answers, rootPathWithoutSuffix);
   let commitString = `${answers.prefix}-${answers.ticket}: ${answers.message}`;
