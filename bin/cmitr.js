@@ -33,7 +33,7 @@ let questions = [
         return true;
       }
       return 'Please enter a Prefix value';
-    },
+    }
   },
   // {
   //   type: 'list',
@@ -48,7 +48,7 @@ let questions = [
     validate(value) {
       var valid = !isNaN(parseFloat(value));
       return valid || 'Please enter ticket number';
-    },
+    }
   },
   {
     type: 'input',
@@ -61,8 +61,8 @@ let questions = [
         return true;
       }
       return 'Incorret commit message';
-    },
-  },
+    }
+  }
   // {
   //   type: 'input',
   //   name: 'summary',
@@ -87,7 +87,7 @@ function checkIfRepo(rootPath) {
 
 function setupQuestions(rootPath) {
   let project = projects.projects.filter(
-    project => project.rootPath === rootPath,
+    project => project.rootPath === rootPath
   );
 
   if (project.length) {
@@ -102,7 +102,7 @@ async function inquirerSetup(questions) {
 
 function saveProject({ prefix, validation }, rootPath) {
   let project = projects.projects.filter(
-    project => project.rootPath === rootPath,
+    project => project.rootPath === rootPath
   );
   if (project.length) {
     for (project of projects.projects) {
@@ -116,7 +116,7 @@ function saveProject({ prefix, validation }, rootPath) {
     projects.projects.push({
       prefix,
       validation,
-      rootPath: rootPath,
+      rootPath: rootPath
     });
   }
   fs.writeFileSync(committerPath, JSON.stringify(projects));

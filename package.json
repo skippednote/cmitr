@@ -1,10 +1,9 @@
 {
-  "name": "committer",
-  "version": "0.1.0",
+  "name": "cmitr",
+  "version": "0.1.1",
   "license": "MIT",
-  "preferGlobal": true,
   "bin": {
-    "committer": "./bin/committer.js"
+    "cmitr": "./bin/cmitr.js"
   },
   "preferGlobal": true,
   "dependencies": {
